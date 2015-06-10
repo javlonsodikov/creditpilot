@@ -1,0 +1,24 @@
+{
+  "name": "vladimir-yuldashev/creditpilot",
+  "description": "CreditPilot PHP library",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Vladimir Yuldashev",
+      "email": "misterio92@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.9",
+    "guzzlehttp/guzzle": "~6.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "CreditPilot\\": "src/CreditPilot"
+    }
+  }
+}
