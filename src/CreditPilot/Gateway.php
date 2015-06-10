@@ -4,6 +4,7 @@ namespace CreditPilot;
 
 use CreditPilot\Responses\FindPayResponse;
 use CreditPilot\Responses\PayResponse;
+use CreditPilot\Responses\PhoneRangesResponse;
 use CreditPilot\Responses\PrepareResponse;
 
 class Gateway
@@ -117,6 +118,31 @@ class Gateway
             ->send();
 
         return new FindPayResponse($response);
+    }
+
+    /**
+     * Get information about phone number
+     *
+     * @param string $phoneNumber
+     * @return PhoneRangesResponse
+     * @throws Exceptions\HttpException
+     */
+    public function phoneRanges($phoneNumber)
+    {
+        $params = [
+            'actionName' => 'PHONERANGES',
+            'phoneNumber' => $phoneNumber,
+        ];
+
+        $request = new Request;
+        $response = $request
+            ->withBaseUrl($this->url)
+            ->withLogin($this->login)
+            ->withPassword($this->password)
+            ->withParams($params)
+            ->send();
+
+        return new PhoneRangesResponse($response);
     }
 
 }
