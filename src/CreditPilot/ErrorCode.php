@@ -36,7 +36,7 @@ class ErrorCode
 
     public static function values()
     {
-        return self::values();
+        return self::$values;
     }
 
 }
