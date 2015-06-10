@@ -2,7 +2,9 @@
 
 namespace CreditPilot;
 
+use CreditPilot\Exceptions\HttpException;
 use GuzzleHttp\Client as Guzzle;
+use GuzzleHttp\Exception\GuzzleException;
 
 class Request
 {
@@ -61,14 +63,20 @@ class Request
     {
         $guzzle = new Guzzle;
 
-        $response = $guzzle->get($this->baseUrl, [
-            'timeout' => $this->timeout,
-            'connection_timeout' => $this->connectionTimeout,
-            'auth' => [$this->login, $this->password],
-            'query' => $this->params,
-        ]);
+        try {
+            $response = $guzzle->get($this->baseUrl, [
+                'timeout' => $this->timeout,
+                'connection_timeout' => $this->connectionTimeout,
+                'auth' => [$this->login, $this->password],
+                'query' => $this->params,
+            ]);
 
-        return $response->getBody()->getContents();
+            return $response->getBody()->getContents();
+        } catch (GuzzleException $e) {
+            throw new HttpException($e->getMessage(), $e->getCode());
+        }
+
+        return null;
     }
 
 }
