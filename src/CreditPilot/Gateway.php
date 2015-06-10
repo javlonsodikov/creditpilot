@@ -4,6 +4,7 @@ namespace CreditPilot;
 
 use CreditPilot\Responses\FindPayResponse;
 use CreditPilot\Responses\PayResponse;
+use CreditPilot\Responses\PrepareResponse;
 
 class Gateway
 {
@@ -24,14 +25,48 @@ class Gateway
     }
 
     /**
-     * @param string $id
-     * @param string $destination phone or card number
-     * @param $provider
-     * @param float $amount
+     * Check if transfer can be performed
      *
-     * @return PayResponse
+     * @param int $id
+     * @param $provider
+     * @param string $destination phone or card number
+     * @param float $amount
+     * @return PrepareResponse
+     * @throws Exceptions\HttpException
      */
-    public function pay($id, $destination, $provider, $amount)
+    public function prepare($id, $provider, $destination, $amount)
+    {
+        $params = [
+            'actionName' => 'PREPARE',
+            'dealerTransactionId' => $id,
+            'serviceProviderId' => $provider,
+            'fullAmount' => $amount,
+            'amount' => $amount,
+            'phoneNumber' => $destination,
+        ];
+
+        $request = new Request;
+        $response = $request
+            ->withBaseUrl($this->url)
+            ->withLogin($this->login)
+            ->withPassword($this->password)
+            ->withParams($params)
+            ->send();
+
+        return new PrepareResponse($response);
+    }
+
+    /**
+     * Send transfer
+     *
+     * @param int $id
+     * @param $provider
+     * @param string $destination phone or card number
+     * @param float $amount
+     * @return PayResponse
+     * @throws Exceptions\HttpException
+     */
+    public function pay($id, $provider, $destination, $amount)
     {
         $params = [
             'actionName' => 'PAY',
@@ -53,6 +88,14 @@ class Gateway
         return new PayResponse($response);
     }
 
+    /**
+     * Get transaction status performed by pay()
+     *
+     * @param string $id
+     * @param bool $isBillNumber
+     * @return FindPayResponse
+     * @throws Exceptions\HttpException
+     */
     public function findPay($id, $isBillNumber = true)
     {
         $params = [
