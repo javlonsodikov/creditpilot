@@ -3,7 +3,7 @@
 namespace CreditPilot;
 
 
-class ErrorCode
+class ResultCode
 {
 
     private static $values = [
@@ -37,6 +37,15 @@ class ErrorCode
     public static function values()
     {
         return self::$values;
+    }
+
+    public static function message($value)
+    {
+        if (!array_key_exists($value, self::$values)) {
+            throw new \InvalidArgumentException('Unexpected value');
+        }
+
+        return self::$values[$value];
     }
 
 }
