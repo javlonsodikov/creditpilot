@@ -15,6 +15,7 @@ class Gateway
     protected $password;
     protected $providers;
 
+    protected $request;
     protected $response;
 
     public function __construct($url, $login, $password, array $providers)
@@ -37,7 +38,7 @@ class Gateway
      */
     public function prepare($id, $provider, $destination, $amount)
     {
-        $params = [
+        $this->request = [
             'actionName' => 'PREPARE',
             'dealerTransactionId' => $id,
             'serviceProviderId' => $provider,
@@ -51,7 +52,7 @@ class Gateway
             ->withBaseUrl($this->url)
             ->withLogin($this->login)
             ->withPassword($this->password)
-            ->withParams($params)
+            ->withParams($this->request)
             ->send();
 
         return new PrepareResponse($response);
@@ -69,7 +70,7 @@ class Gateway
      */
     public function pay($id, $provider, $destination, $amount)
     {
-        $params = [
+        $this->request = [
             'actionName' => 'PAY',
             'dealerTransactionId' => $id,
             'serviceProviderId' => $provider,
@@ -83,7 +84,7 @@ class Gateway
             ->withBaseUrl($this->url)
             ->withLogin($this->login)
             ->withPassword($this->password)
-            ->withParams($params)
+            ->withParams($this->request)
             ->send();
 
         return new PayResponse($response);
@@ -99,14 +100,14 @@ class Gateway
      */
     public function findPay($id, $isBillNumber = true)
     {
-        $params = [
+        $this->request = [
             'actionName' => 'FINDPAY',
         ];
 
         if ($isBillNumber) {
-            $params['billNumber'] = $id;
+            $this->request['billNumber'] = $id;
         } else {
-            $params['dealerTransactionId'] = $id;
+            $this->request['dealerTransactionId'] = $id;
         }
 
         $request = new Request;
@@ -114,7 +115,7 @@ class Gateway
             ->withBaseUrl($this->url)
             ->withLogin($this->login)
             ->withPassword($this->password)
-            ->withParams($params)
+            ->withParams($this->request)
             ->send();
 
         return new FindPayResponse($response);
@@ -129,7 +130,7 @@ class Gateway
      */
     public function phoneRanges($phoneNumber)
     {
-        $params = [
+        $this->request = [
             'actionName' => 'PHONERANGES',
             'phoneNumber' => $phoneNumber,
         ];
@@ -139,10 +140,15 @@ class Gateway
             ->withBaseUrl($this->url)
             ->withLogin($this->login)
             ->withPassword($this->password)
-            ->withParams($params)
+            ->withParams($this->request)
             ->send();
 
         return new PhoneRangesResponse($response);
+    }
+
+    public function request()
+    {
+        return $this->request;
     }
 
 }
