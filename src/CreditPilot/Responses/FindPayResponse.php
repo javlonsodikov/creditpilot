@@ -10,4 +10,9 @@ class FindPayResponse extends AbstractResponse
         return current($this->parsed()->payment->result->attributes()->resultCode);
     }
 
+    public function resultDescription()
+    {
+        return current($this->parsed()->payment->result->attributes()->resultDescription);
+    }
+
 }
