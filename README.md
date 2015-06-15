@@ -15,11 +15,11 @@ This is a library for [CreditPilot](http://www.creditpilot.ru/) service.
 	    []
 	);
 	
-	$response = $gateway->prepare(time(), '712698259', '9672504771', 100);
+	$response = $gateway->prepare(time(), '712698259', '9631234567', 100);
 
 	if($response->canPay()) {
 	
-		$response = $gateway->pay(time(), '712698259', '9672504771', 100);
+		$response = $gateway->pay(time(), '712698259', '9631234567', 100);
 		
 		if($response->succeed()) {
 		
