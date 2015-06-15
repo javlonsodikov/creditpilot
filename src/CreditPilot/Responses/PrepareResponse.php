@@ -2,13 +2,17 @@
 
 namespace CreditPilot\Responses;
 
-
 class PrepareResponse extends AbstractResponse
 {
 
     public function resultCode()
     {
         return current($this->parsed()->result->attributes()->resultCode);
+    }
+
+    public function resultDescription()
+    {
+        return current($this->parsed()->payment->result->attributes()->resultDescription);
     }
 
     /**
