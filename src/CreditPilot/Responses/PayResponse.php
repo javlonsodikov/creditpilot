@@ -27,7 +27,7 @@ class PayResponse extends AbstractResponse
 
     public function resultDescription()
     {
-        return current($this->parsed()->payment->result->attributes()->resultDescription);
+        return current($this->parsed()->result->attributes()->resultDescription);
     }
 
 }
