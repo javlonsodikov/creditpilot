@@ -2,7 +2,6 @@
 
 namespace CreditPilot\Responses;
 
-
 class PhoneRangesResponse extends AbstractResponse
 {
 
@@ -14,6 +13,16 @@ class PhoneRangesResponse extends AbstractResponse
     public function providerName()
     {
         return current($this->parsed()->phoneRange->attributes()->providerName);
+    }
+
+    public function defCode()
+    {
+        return current($this->parsed()->phoneRange->attributes()->defCode);
+    }
+
+    public function locationName()
+    {
+        return current($this->parsed()->phoneRange->attributes()->locationName);
     }
 
     /**
