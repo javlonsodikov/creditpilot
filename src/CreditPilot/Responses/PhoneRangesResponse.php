@@ -5,34 +5,65 @@ namespace CreditPilot\Responses;
 class PhoneRangesResponse extends AbstractResponse
 {
 
-    /**
-     * Provider name
-     *
-     * @return string
-     */
-    public function providerName()
-    {
-        return current($this->parsed()->phoneRange->attributes()->providerName);
-    }
+	public function resultCode()
+	{
+		return current($this->parsed()->result->attributes()->resultCode);
+	}
 
-    public function defCode()
-    {
-        return current($this->parsed()->phoneRange->attributes()->defCode);
-    }
+	public function resultDescription()
+	{
+		return current($this->parsed()->result->attributes()->resultDescription);
+	}
 
-    public function locationName()
-    {
-        return current($this->parsed()->phoneRange->attributes()->locationName);
-    }
+	/**
+	 * Provider name
+	 *
+	 * @return string
+	 */
+	public function providerName()
+	{
+		if (!$this->nodeExists()) {
+			return null;
+		}
 
-    /**
-     * Array of provider ids that can be used
-     *
-     * @return array
-     */
-    public function providerIds()
-    {
-        return explode(',', current($this->parsed()->phoneRange->attributes()->providerIds));
-    }
+		return current($this->parsed()->phoneRange->attributes()->providerName);
+	}
+
+	public function defCode()
+	{
+		if (!$this->nodeExists()) {
+			return null;
+		}
+
+		return current($this->parsed()->phoneRange->attributes()->defCode);
+	}
+
+	public function locationName()
+	{
+		if (!$this->nodeExists()) {
+			return null;
+		}
+
+		return current($this->parsed()->phoneRange->attributes()->locationName);
+	}
+
+	/**
+	 * Array of provider ids that can be used
+	 *
+	 * @return array
+	 */
+	public function providerIds()
+	{
+		if (!$this->nodeExists()) {
+			return null;
+		}
+
+		return explode(',', current($this->parsed()->phoneRange->attributes()->providerIds));
+	}
+
+	private function nodeExists()
+	{
+		return isset($this->parsed()->phoneRange);
+	}
 
 }
