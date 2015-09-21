@@ -26,6 +26,44 @@ class Gateway
         $this->providers = $providers;
     }
 
+    public function extendedPrepare($id, $provider, array $fields = [])
+    {
+        $this->request = array_merge($fields, [
+            'actionName' => 'PREPARE',
+            'dealerTransactionId' => $id,
+            'serviceProviderId' => $provider,
+        ]);
+
+        $request = new Request;
+        $response = $request
+            ->withBaseUrl($this->url)
+            ->withLogin($this->login)
+            ->withPassword($this->password)
+            ->withParams($this->request)
+            ->send();
+
+        return new PrepareResponse($response);
+    }
+
+    public function extendedPay($id, $provider, array $fields = [])
+    {
+        $this->request = array_merge($fields, [
+            'actionName' => 'PAY',
+            'dealerTransactionId' => $id,
+            'serviceProviderId' => $provider,
+        ]);
+
+        $request = new Request;
+        $response = $request
+            ->withBaseUrl($this->url)
+            ->withLogin($this->login)
+            ->withPassword($this->password)
+            ->withParams($this->request)
+            ->send();
+
+        return new PayResponse($response);
+    }
+
     /**
      * Check if transfer can be performed
      *
