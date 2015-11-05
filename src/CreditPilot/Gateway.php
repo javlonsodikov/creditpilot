@@ -2,6 +2,8 @@
 
 namespace CreditPilot;
 
+use CreditPilot\Responses\CheckPayResponse;
+use CreditPilot\Responses\FindCheckResponse;
 use CreditPilot\Responses\FindPayResponse;
 use CreditPilot\Responses\PayResponse;
 use CreditPilot\Responses\PhoneRangesResponse;
@@ -149,6 +151,57 @@ class Gateway
     public function request()
     {
         return $this->request;
+    }
+
+    /**
+     * @param $id
+     * @param $provider
+     * @param array $fields
+     * @return CheckPayResponse
+     * @throws \CreditPilot\Exceptions\HttpException
+     */
+    public function extendedCheckPay($id, $provider, array $fields = [])
+    {
+        $this->request = array_merge($fields, [
+            'actionName' => 'CHECKPAY',
+            'dealerTransactionId' => $id,
+            'serviceProviderId' => $provider,
+        ]);
+
+        $request = new Request;
+        $response = $request
+            ->withBaseUrl($this->url)
+            ->withLogin($this->login)
+            ->withPassword($this->password)
+            ->withParams($this->request)
+            ->send();
+
+        return new CheckPayResponse($response);
+    }
+
+    /**
+     * @param $id
+     * @param $provider
+     * @param array $fields
+     * @return FindCheckResponse
+     * @throws \CreditPilot\Exceptions\HttpException
+     */
+    public function extendedFindCheck($id, array $fields = [])
+    {
+        $this->request = array_merge($fields, [
+            'actionName' => 'FINDCHECK',
+            'dealerTransactionId' => $id,
+        ]);
+
+        $request = new Request;
+        $response = $request
+            ->withBaseUrl($this->url)
+            ->withLogin($this->login)
+            ->withPassword($this->password)
+            ->withParams($this->request)
+            ->send();
+
+        return new FindCheckResponse($response);
     }
 
 }
