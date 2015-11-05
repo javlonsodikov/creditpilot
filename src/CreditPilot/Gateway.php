@@ -218,17 +218,16 @@ class Gateway
     }
 
     /**
-     * @param $id
-     * @param $provider
+     * @param $billNumber
      * @param array $fields
      * @return FindCheckResponse
      * @throws \CreditPilot\Exceptions\HttpException
      */
-    public function extendedFindCheck($id, array $fields = [])
+    public function extendedFindCheck($billNumber, array $fields = [])
     {
         $this->request = array_merge($fields, [
             'actionName' => 'FINDCHECK',
-            'dealerTransactionId' => $id,
+            'billNumber' => $billNumber,
         ]);
 
         $request = new Request;
