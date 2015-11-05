@@ -9,11 +9,18 @@ namespace CreditPilot\Responses;
 class CheckPayResponse extends AbstractResponse
 {
     /**
-     * @return mixed
+     * @return mixed|null
      */
     public function billNumber()
     {
-        return current($this->parsed()->billNumber);
+        switch (true) {
+            case isset($this->parsed()->billNumber):
+                return current($this->parsed()->billNumber);
+            case isset($this->parsed()->billnumber):
+                return current($this->parsed()->billnumber);
+        }
+
+        return null;
     }
 
     /**
@@ -21,6 +28,6 @@ class CheckPayResponse extends AbstractResponse
      */
     public function succeed()
     {
-        return !empty($this->parsed()->billNumber);
+        return !empty($this->parsed()->billNumber) || !empty($this->parsed()->billnumber);
     }
 }
