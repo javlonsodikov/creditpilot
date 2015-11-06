@@ -30,6 +30,20 @@ class FindCheckResponse extends AbstractResponse
         return true;
     }
 
+    public function resultCode()
+    {
+        return isset($this->parsed()->payment->result->attributes()->resultCode) ?
+            current($this->parsed()->payment->result->attributes()->resultCode) :
+            null;
+    }
+
+    public function resultDescription()
+    {
+        return isset($this->parsed()->payment->result->attributes()->resultDescription) ?
+            current($this->parsed()->payment->result->attributes()->resultDescription) :
+            null;
+    }
+
     /**
      * @return mixed|null
      */
